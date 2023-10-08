@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>vue04</title>
+    <!--引入vue.js-->
+    <script src="https://cdn.bootcss.com/vue/2.5.16/vue.min.js"></script>
+</head>
+<body>
+
+<div id="app">
+    <div v-if="state==1"> state:1 </div>
+    <div v-if="state==2"> state:2 </div>
+    <div v-show="showState==3"></div>
+    <div v-if="sb==4"> sb:4 </div>
+    <input type="text" v-model="state">
+</div>
+
+<script>
+  new Vue({
+    el:"#app",
+    data(){
+      return{
+          state:1,
+          showState:3,
+          sb:4
+
+      }
+    }
+  });
+</script>
+
+</body>
+</html>

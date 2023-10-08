@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>开始使用 layui</title>
+  <link rel="stylesheet" type="text/css" href="https://www.layuicdn.com/layui-v2.5.6/css/layui.css"/>
+  <script src="https://cdn.bootcss.com/vue/2.5.16/vue.min.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+
+
+<body>
+<div id="app">
+  <a type="" class="add-user-link" href="suAddUser.html">新增用户数据</a>
+  <table class="layui-table">
+
+    <colgroup>
+      <col width="150">
+      <col width="200">
+      <col>
+    </colgroup>
+    <thead>
+    <tr>
+      <th>学生ID</th>
+      <th>学生名称</th>
+      <th>学生年龄</th>
+      <th>学生地址</th>
+      <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr v-for="user in users" >
+      <td>{{user.id}}</td>
+      <td>{{user.name}}</td>
+      <td>{{user.age}}</td>
+      <td>{{user.address}}</td>
+      <td>
+        <a href="#" @click="delUser(user.id)">删除</a>&nbsp;&nbsp;
+        <a :href="'vueUpdateUser.html?id='+user.id">修改</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<script>
+  new Vue({
+    el:"#app",
+
+    data(){
+      return{
+        users: []
+      }
+    },
+    methods:{
+      delUser(id){
+        alert("确认删除该数据？")
+        axios({
+          // 请求方式
+          method: 'DELETE',
+          // 请求的地址
+          url: 'http://localhost:7921/user02/deleteUser/'+id
+        }).then(function (result) {
+          // 1. 调用 axios 方法得到的返回值是 Promise 对象
+          var code = result.data.code;
+          if (code == "200") {
+            alert("删除成功！")
+            window.location.href = "vueIndex.html";
+          }
+        })
+      }
+
+    },
+
+
+    mounted(){
+      var _this=this;
+      axios({
+        // 请求方式
+        method: 'GET',
+        // 请求的地址
+        url: 'http://localhost:7921/user02/getUsersAll'
+      }).then(function (result) {
+        // 1. 调用 axios 方法得到的返回值是 Promise 对象
+        var code = result.data.code;
+        var data = result.data.data;
+        if (code == "200") {
+            _this.users=data;
+        }
+      })
+    }
+  })
+</script>
+
+<style>
+  /* Style for the "新增用户数据" link */
+  .add-user-link {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007BFF; /* Blue background color */
+    color: #fff; /* White text color */
+    text-decoration: none; /* Remove underlines */
+    border-radius: 5px; /* Rounded corners */
+    transition: background-color 0.3s ease; /* Smooth background color transition */
+  }
+
+  /* Hover effect for the link */
+  .add-user-link:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+  }
+</style>
+
+
+</body>
+</html>
